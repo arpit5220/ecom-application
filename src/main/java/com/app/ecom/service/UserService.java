@@ -1,0 +1,43 @@
+package com.app.ecom.service;
+
+import com.app.ecom.repository.UserRepository;
+import com.app.ecom.model.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class UserService {
+
+  //  private List<User> userList = new ArrayList<>();
+
+    private final UserRepository userRepository;
+   // private Long nextId = 1L;
+
+    public List<User> fetchAllUsers(){
+        return userRepository.findAll();
+    }
+
+    public void creteUser(User user){
+        userRepository.save(user);
+    }
+
+    public Optional<User> fetchUser(Long id){
+        return userRepository.findById(id);
+    }
+
+    public boolean updateUser(Long id,User updatedUser)
+    {
+        return userRepository.findById(id)
+                .map(existingUser ->{
+                    existingUser.setFirstName(updatedUser.getFirstName());
+                    existingUser.setLastName(updatedUser.getLastName());
+                    userRepository.save(existingUser);
+                    return true;
+                }).orElse(false);
+    }
+
+}
